@@ -1,0 +1,26 @@
+{
+  "usuarios": [
+    {
+      "id": "b54c",
+      "nome": "Marcos Antonio dos Santos",
+      "login": "marcaosi",
+      "email": "marcosantonio@univas.edu.br",
+      "telefone": "(35) 99867-2990",
+      "cargo": "Professor Colaborador",
+      "tipo": "professor",
+      "ativo": 0
+    },
+    {
+      "id": "7ec1",
+      "nome": "Francisco Rafael",
+      "login": "f-rxfxel",
+      "email": "franciscorafael@univas.edu.br",
+      "telefone": "(35) 99999-8999",
+      "cargo": "",
+      "tipo": "aluno",
+      "ativo": 0
+    }
+  ],
+  "repositorios": [],
+  "seguidores": []
+}

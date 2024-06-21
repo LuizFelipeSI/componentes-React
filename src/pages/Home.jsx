@@ -6,18 +6,18 @@ import Botao from '../components/Botao.jsx'
 import Cabecalho from '../components/Cabecalho.jsx'
 import Rodape from '../components/Rodape/index.jsx'
 import Titulo from '../components/Titulo.jsx'
-// devo passar o caminho relativo ao arquivo do componente construído a partir do arquivo que estou trabalhando
 
 function Home() {
   const [usuarios, setUsuarios] = useState([])
   const [erro, setErro] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [nome, setNome] = useState("")
+  const [darkMode, setDarkMode] = useState(false)
 
   useEffect(() => {
-    if (nome != "" && nome.length > 3 && !isLoading) {
+    if (nome !== "" && nome.length > 3 && !isLoading) {
       setUsuarios(usuarios.filter(usuario => usuario.nome.toLowerCase().includes(nome.toLowerCase())))
-    } else if (isLoading || nome.length == 0) {
+    } else if (isLoading || nome.length === 0) {
       axios.get(`http://localhost:3000/usuarios`)
         .then(res => {
           setUsuarios(res.data)
@@ -28,14 +28,14 @@ function Home() {
           setErro("Não foi possível carregar a lista de usuários.")
         })
     }
-  }, [isLoading, nome]) //Deixe o array vazio caso queira que o código seja executado apenas uma vez durante o ciclo de vida do componente
+  }, [isLoading, nome])
 
   function mascararEmail(email) {
     let emailMascarado = email[0]
     let mostrarCaracter = false
 
     for (let i = 1; i < email.length; i++) {
-      if (email[i] == '@') {
+      if (email[i] === '@') {
         mostrarCaracter = true
       }
 
@@ -46,16 +46,14 @@ function Home() {
       }
     }
 
-
     return emailMascarado
   }
 
   function inativarUsuario(id) {
-    // PATCH
     axios.patch(`http://localhost:3000/usuarios/${id}`, { ativo: 0 })
       .then(res => {
         console.log(res.data)
-        setIsLoading(true) // Força a atualização da lista de usuários
+        setIsLoading(true)
       })
       .catch(res => {
         console.log(res.data)
@@ -64,11 +62,10 @@ function Home() {
   }
 
   function ativarUsuario(id) {
-    // PATCH
     axios.patch(`http://localhost:3000/usuarios/${id}`, { ativo: 1 })
       .then(res => {
         console.log(res.data)
-        setIsLoading(true) // Força a atualização da lista de usuários
+        setIsLoading(true)
       })
       .catch(res => {
         console.log(res.data)
@@ -78,23 +75,25 @@ function Home() {
 
   function removerUsuario(id) {
     axios.delete(`http://localhost:3000/usuarios/${id}`)
-    
-    setIsLoading(true) // Força a atualização da lista de usuários
-    setUsuarios([]) // Força a atualização da lista de usuários
+    setIsLoading(true)
+    setUsuarios([])
   }
 
   function atualizaNome(event) {
     setNome(event.target.value)
   }
 
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode)
+  }
+
   if (isLoading) {
-    // Mostra a mensagem de carregando enquanto atualiza a página
     return (
       <h1>Carregando</h1>
     )
   } else {
     return (
-      <>
+      <div className={`container ${darkMode ? 'bg-dark text-white' : 'bg-light text-dark'}`} style={{ minHeight: '100vh' }}>
         <div className='row'>
           <div className='col-3'>
             <label htmlFor="_nome">Nome</label>
@@ -102,6 +101,10 @@ function Home() {
           </div>
           <div className='col'>
             <div className='d-flex align-items-end justify-content-end'>
+              <div className="form-check form-switch">
+                <input className="form-check-input" type="checkbox" id="darkModeSwitch" checked={darkMode} onChange={toggleDarkMode} />
+                <label className="form-check-label" htmlFor="darkModeSwitch">Dark Mode</label>
+              </div>
               <Link to={"/cadastro"} className="btn btn-primary">Novo registro</Link>
             </div>
           </div>
@@ -133,10 +136,10 @@ function Home() {
                         <td>{mascararEmail(usuario.email)}</td>
                         <td>
                           {
-                            usuario.ativo == 1 && <Botao tipo="danger" acao={() => inativarUsuario(usuario.id)}>Desativar</Botao>
+                            usuario.ativo === 1 && <Botao tipo="danger" acao={() => inativarUsuario(usuario.id)}>Desativar</Botao>
                           }
                           {
-                            usuario.ativo == 0 && <Botao tipo="success" acao={() => ativarUsuario(usuario.id)}>Ativar</Botao>
+                            usuario.ativo === 0 && <Botao tipo="success" acao={() => ativarUsuario(usuario.id)}>Ativar</Botao>
                           }
                           {
                             <Botao tipo="danger" acao={() => removerUsuario(usuario.id)}>Excluir</Botao>
@@ -150,11 +153,9 @@ function Home() {
             </table>
           </div>
         </div>
-      </>
+      </div>
     )
   }
-
-
 }
 
 export default Home

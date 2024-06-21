@@ -1,5 +1,15 @@
 {
-  "usuarios": [],
+  "usuarios": [
+    {
+      "id": "cf99",
+      "nome": "LUIZ FELIPE FRAGA PEREIRA",
+      "tipo": "",
+      "email": "lfpereira323@gmail.com",
+      "telefone": "35999302447",
+      "ativo": 1,
+      "cargo": ""
+    }
+  ],
   "repositorios": [],
   "seguidores": []
 }

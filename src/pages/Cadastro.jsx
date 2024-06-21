@@ -1,39 +1,37 @@
 import { useState } from "react"
 import { useNavigate } from 'react-router-dom'
-
 import axios from 'axios'
 
-function Cadastro(){
+function Cadastro() {
     const navigate = useNavigate()
     const [erros, setErros] = useState({})
     const [usuario, setUsuario] = useState({
         nome: "",
         tipo: ""
     })
-    // Um componente controlado é aquele que é definido o value desde o início
-    // Um componente não controlado é aquele que não é definido o value desde o início
-    // Por isso colocamos as propriedades do estado desde o início no useState
+    const [darkMode, setDarkMode] = useState(false)
 
-    function handleNome(event){
-        const {value} = event.target
+    function handleNome(event) {
+        const { value } = event.target
         let nomeInvalido = false
 
-        if(value.length < 3){
+        if (value.length < 3) {
             nomeInvalido = true
         }
 
-        if(!value.trim().includes(" ")){
+        if (!value.trim().includes(" ")) {
             nomeInvalido = true
         }
 
-        if(nomeInvalido){
+        if (nomeInvalido) {
             setErros({
                 ...erros,
                 nome: "Digite o nome completo do usuário"
             })
-        }else{
+        } else {
             setErros({
-                ... delete erros.nome
+                ...erros,
+                nome: undefined
             })
         }
 
@@ -43,35 +41,36 @@ function Cadastro(){
         })
     }
 
-    function handleLogin(event){
-        const {value} = event.target
-        
+    function handleLogin(event) {
+        const { value } = event.target
+
         setUsuario({
             ...usuario,
             login: value
         })
     }
 
-    function handleEmail(event){
-        const {value} = event.target
+    function handleEmail(event) {
+        const { value } = event.target
         let nomeInvalido = false
 
-        if(value.length < 3){
+        if (value.length < 3) {
             nomeInvalido = true
         }
 
-        if(!value.includes("@")){
+        if (!value.includes("@")) {
             nomeInvalido = true
         }
 
-        if(nomeInvalido){
+        if (nomeInvalido) {
             setErros({
                 ...erros,
                 email: "Digite o e-mail completo do usuário"
             })
-        }else{
+        } else {
             setErros({
-                ... delete erros.email
+                ...erros,
+                email: undefined
             })
         }
 
@@ -81,36 +80,37 @@ function Cadastro(){
         })
     }
 
-    function handleTipo(event){
-        const {value} = event.target
-        
+    function handleTipo(event) {
+        const { value } = event.target
+
         setUsuario({
             ...usuario,
             tipo: value
         })
     }
 
-    function handleTelefone(event){
-        const {value} = event.target
+    function handleTelefone(event) {
+        const { value } = event.target
 
         let telefoneInvalido = false
 
-        if(value.length > 15 || value.length < 14){
+        if (value.length > 15 || value.length < 14) {
             telefoneInvalido = true
         }
 
-        if(!value.includes("(") || !value.includes(")") || !value.includes("-") || !value.includes(" ")){
+        if (!value.includes("(") || !value.includes(")") || !value.includes("-") || !value.includes(" ")) {
             telefoneInvalido = true
         }
 
-        if(telefoneInvalido){
+        if (telefoneInvalido) {
             setErros({
                 ...erros,
                 telefone: "Insira o telefone no padrão (99) 99999-9999"
             })
-        }else{
+        } else {
             setErros({
-                ... delete erros.telefone
+                ...erros,
+                telefone: undefined
             })
         }
 
@@ -119,12 +119,11 @@ function Cadastro(){
         })
     }
 
-    function submitForm(event){
+    function submitForm(event) {
         event.preventDefault()
         usuario.ativo = 1
         usuario.cargo = usuario.tipo
 
-        console.log(usuario)
         // Criar validações aqui
         // Nome => Mais de 03 caracteres e completo
         // Login => Não pode estar vazio
@@ -142,11 +141,20 @@ function Cadastro(){
                 // Colocar erro no estado e mostrar em tela
             })
     }
+
+    const toggleDarkMode = () => {
+        setDarkMode(!darkMode)
+    }
+
     return (
-        <div>
+        <div className={`container ${darkMode ? 'bg-dark text-white' : 'bg-light text-dark'}`} style={{ minHeight: '100vh' }}>
             <div className="row">
                 <div className="col">
                     <h1>Página de cadastro de usuários</h1>
+                    <div className="form-check form-switch">
+                        <input className="form-check-input" type="checkbox" id="darkModeSwitch" checked={darkMode} onChange={toggleDarkMode} />
+                        <label className="form-check-label" htmlFor="darkModeSwitch">Dark Mode</label>
+                    </div>
                 </div>
             </div>
             <div className="row">
